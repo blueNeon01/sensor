@@ -39,7 +39,6 @@ public class SensorLogAggregatedRepository {
         .withExpressionAttributeValues(values)
         .withConsistentRead(false);
 
-
     final List<SensorLogAggregatedModel> query = dynamoDBMapper.query(
         SensorLogAggregatedModel.class, queryExpression);
 

@@ -58,6 +58,7 @@ public class SensorController {
 
     try {
       sensorLogRepository.save(log);
+      logger.info("Adding logs");
       return true;
     } catch (Exception exception) {
       logger.info(exception.getMessage());

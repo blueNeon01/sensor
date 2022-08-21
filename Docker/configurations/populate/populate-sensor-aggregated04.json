@@ -1,0 +1,14 @@
+{
+  "id_sensor": {
+    "S": "a61de129-6ce1-48cc-9ed2-c573635dd3c1"
+  },
+  "when_log": {
+    "S": "2022-08-20T06:49:36"
+  },
+  "averageTemperature": {
+    "N": "11"
+  },
+  "totalRecords": {
+    "N": "23"
+  }
+}

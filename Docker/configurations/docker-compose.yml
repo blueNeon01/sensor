@@ -1,0 +1,13 @@
+version: '3.0'
+
+services:
+  localstack:
+    container_name: "localstack"
+    image: "localstack/localstack:0.11.3"
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - EDGE_PORT=4566
+      - SERVICES=dynamodb
+    ports:
+      - "127.0.0.1:4510-4559:4510-4559"
+      - "127.0.0.1:4566:4566"

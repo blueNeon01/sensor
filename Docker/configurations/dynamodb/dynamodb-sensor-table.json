@@ -1,0 +1,27 @@
+{
+  "TableName": "tb_sensor_log",
+  "KeySchema": [
+    {
+      "AttributeName": "id_sensor",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "when_log",
+      "KeyType": "RANGE"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "id_sensor",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "when_log",
+      "AttributeType": "S"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 1,
+    "WriteCapacityUnits": 1
+  }
+}

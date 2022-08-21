@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 PATH_DYNAMODB_CONFIGURATION="populate"
 

@@ -48,4 +48,11 @@ public class SaveSensorLogRequest {
     this.when = when;
   }
 
+  @Override
+  public String toString() {
+    return "SaveSensorLogRequest{" +
+        "temperature=" + temperature +
+        ", when=" + when +
+        '}';
+  }
 }

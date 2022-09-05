@@ -5,10 +5,10 @@ import static org.hamcrest.Matchers.equalTo;
 
 import com.example.sensor.dynamo.domain.SensorLogAggregatedDomain;
 import com.example.sensor.dynamo.model.SensorLogAggregatedModel;
+import com.example.sensor.enums.AggregationType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.junit.Test;
 
 public class SensorLogAggregatedMapperTest {
@@ -18,7 +18,7 @@ public class SensorLogAggregatedMapperTest {
   @Test
   public void testeMapFrom(){
     final SensorLogAggregatedDomain source = new SensorLogAggregatedDomain();
-    source.setId(UUID.randomUUID());
+    source.setAggregationType(AggregationType.DAILY.toString());
     source.setWhen(LocalDateTime.now());
     source.setAverageTemperature(10F);
     source.setTotalRecords(1);
@@ -34,7 +34,7 @@ public class SensorLogAggregatedMapperTest {
   @Test
   public void testeMapFromList(){
     final SensorLogAggregatedModel aggregateModel = new SensorLogAggregatedModel();
-    aggregateModel.setId(UUID.randomUUID());
+    aggregateModel.setAggregationType(AggregationType.DAILY.toString());
     aggregateModel.setWhen(LocalDateTime.now());
     aggregateModel.setAverageTemperature(10F);
     aggregateModel.setTotalRecords(1);

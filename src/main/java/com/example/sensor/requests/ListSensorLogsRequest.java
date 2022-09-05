@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 @JsonInclude(Include.NON_NULL)
 public class ListSensorLogsRequest {
-  @JsonProperty("aggregationType")
+  @JsonProperty("aggregation_type")
   private AggregationType aggregationType;
   @JsonProperty("from")
   private LocalDateTime from;

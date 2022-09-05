@@ -13,8 +13,7 @@ public abstract class SensorLogAggregatedMapper {
   public static final SensorLogAggregatedMapper INSTANCE = Mappers.getMapper(
       SensorLogAggregatedMapper.class);
 
-  //@Mapping(target = "id", source = "id")
-  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "aggregationType", source = "aggregationType")
   @Mapping(target = "when", source = "when")
   @Mapping(target = "averageTemperature", source = "averageTemperature")
   @Mapping(target = "totalRecords", source = "totalRecords")

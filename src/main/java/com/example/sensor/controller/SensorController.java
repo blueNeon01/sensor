@@ -1,8 +1,13 @@
 package com.example.sensor.controller;
 
+import com.example.sensor.dynamo.domain.SensorLogAggregatedDomain;
 import com.example.sensor.dynamo.domain.SensorLogDomain;
+import com.example.sensor.dynamo.respository.SensorLogAggregatedRepository;
 import com.example.sensor.dynamo.respository.SensorLogRepository;
+import com.example.sensor.enums.AggregationType;
+import com.example.sensor.requests.ListSensorLogsRequest;
 import com.example.sensor.requests.SaveSensorLogRequest;
+import com.example.sensor.service.SensorLogAggregated;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +28,29 @@ public class SensorController {
 
   @Autowired
   private SensorLogRepository sensorLogRepository;
+
+
+  @Autowired
+  private SensorLogAggregated sensorLogAggregated;
+
+  @Autowired
+  private SensorLogAggregatedRepository sensorLogAggregatedRepository;
+
+  @GetMapping(path = "/log", produces = MediaType.APPLICATION_JSON_VALUE)
+  List<? extends SensorLogAggregatedDomain> list(
+      @RequestBody ListSensorLogsRequest listSensorLogs) {
+
+    var aggregationType = listSensorLogs.getAggregationType();
+    var from = listSensorLogs.getFrom();
+    var to = listSensorLogs.getTo();
+
+    if (listSensorLogs.getAggregationType().equals(AggregationType.DAILY)) {
+      return sensorLogAggregatedRepository.findAll(aggregationType, from, to);
+    }
+
+    return sensorLogAggregatedRepository.findAll(aggregationType, from, to);
+
+  }
 
   @PostMapping(path = "/log", produces = MediaType.APPLICATION_JSON_VALUE)
   Map<String, Object> save(@RequestBody List<SaveSensorLogRequest> payload) throws ParseException {
@@ -46,6 +75,8 @@ public class SensorController {
     result.put("logsToSave", logsToSave);
     result.put("logsSaved", logsSaved);
     result.put("aggregationGenerated", aggregationGenerated);
+
+    sensorLogAggregated.sensorLogAggregated(payload);
 
     return result;
   }

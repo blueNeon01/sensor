@@ -1,6 +1,6 @@
 {
-  "id_sensor": {
-    "S": "79f2210e-e158-43ba-b2d0-42855f5256e6"
+  "aggregated_type": {
+    "S": "DAILY"
   },
   "when_log": {
     "S": "2022-08-20T06:48:36"

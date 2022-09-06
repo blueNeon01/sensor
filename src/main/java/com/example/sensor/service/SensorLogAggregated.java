@@ -4,8 +4,7 @@ import com.example.sensor.dynamo.domain.SensorLogAggregatedDomain;
 import com.example.sensor.dynamo.respository.SensorLogAggregatedRepository;
 import com.example.sensor.enums.AggregationType;
 import com.example.sensor.requests.SaveSensorLogRequest;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.example.sensor.util.Util;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,32 +25,42 @@ public class SensorLogAggregated {
 
   public void sensorLogAggregated(List<SaveSensorLogRequest> requests) {
 
+    final Map<String, List<SaveSensorLogRequest>> mapAggregatedSensorHourly = getStringListMap(
+        requests, ChronoUnit.HOURS);
+    mapToDomain(mapAggregatedSensorHourly, AggregationType.HOURLY);
+
+    final Map<String, List<SaveSensorLogRequest>> mapAggregatedSensorDaily = getStringListMap(
+        requests, ChronoUnit.DAYS);
+    mapToDomain(mapAggregatedSensorDaily, AggregationType.DAILY);
+
+  }
+
+  private static Map<String, List<SaveSensorLogRequest>> getStringListMap(
+      List<SaveSensorLogRequest> requests, ChronoUnit chronoUnit) {
     final Map<String, List<SaveSensorLogRequest>> mapAggregatedSensor = new HashMap<>();
 
     try {
       for (SaveSensorLogRequest request : requests) {
         mapAggregatedSensor.computeIfAbsent(
-            request.getWhen().truncatedTo(ChronoUnit.HOURS).toString(), k -> new ArrayList<>());
-        mapAggregatedSensor.get(request.getWhen().truncatedTo(ChronoUnit.HOURS).toString())
+            request.getWhen().truncatedTo(chronoUnit).toString(), k -> new ArrayList<>());
+        mapAggregatedSensor.get(request.getWhen().truncatedTo(chronoUnit).toString())
             .add(request);
       }
 
     } catch (Exception e) {
       logger.info(e.getMessage());
     }
-
-    mapToDomain(mapAggregatedSensor);
-
+    return mapAggregatedSensor;
   }
 
   private SensorLogAggregatedDomain mapToDomain(
-      Map<String, List<SaveSensorLogRequest>> mapAggregatedSensor) {
-    var teste = mapAggregatedSensor.entrySet().iterator().next().getValue();
+      Map<String, List<SaveSensorLogRequest>> mapAggregatedSensor, AggregationType aggregationType) {
+    var aggregatedSensorList = mapAggregatedSensor.entrySet().iterator().next().getValue();
 
     float sumLogs = 0F;
     int countLogs = 0;
 
-    for (SaveSensorLogRequest saveSensorLogRequest : teste) {
+    for (SaveSensorLogRequest saveSensorLogRequest : aggregatedSensorList) {
       sumLogs += saveSensorLogRequest.getTemperature();
       countLogs += 1;
     }
@@ -59,23 +68,14 @@ public class SensorLogAggregated {
     float averageLogs = sumLogs / countLogs;
 
     SensorLogAggregatedDomain domain = new SensorLogAggregatedDomain();
-    domain.setWhen(dateFormater(mapAggregatedSensor.keySet().toString()));
+    domain.setWhen(Util.dateFormatter(mapAggregatedSensor.keySet().toString()));
     domain.setAverageTemperature(averageLogs);
     domain.setTotalRecords(countLogs);
-    domain.setAggregationType(AggregationType.DAILY.toString());
+    domain.setAggregationType(aggregationType.toString());
 
     sensorLogAggregatedRepository.save(domain);
-
     return domain;
 
-  }
-
-  private LocalDateTime dateFormater(String date) {
-    String newDate = date.replaceAll("[()\\[\\]]", "");
-    DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    LocalDateTime dateTime = LocalDateTime.parse(newDate, formatter);
-
-    return dateTime;
   }
 
 }

@@ -2,7 +2,7 @@
   "TableName": "tb_sensor_log_aggregated",
   "KeySchema": [
     {
-      "AttributeName": "id_sensor",
+      "AttributeName": "aggregated_type",
       "KeyType": "HASH"
     },
     {
@@ -12,7 +12,7 @@
   ],
   "AttributeDefinitions": [
     {
-      "AttributeName": "id_sensor",
+      "AttributeName": "aggregated_type",
       "AttributeType": "S"
     },
     {
@@ -23,27 +23,5 @@
   "ProvisionedThroughput": {
     "ReadCapacityUnits": 1,
     "WriteCapacityUnits": 1
-  },
-  "GlobalSecondaryIndexes": [
-    {
-      "IndexName": "x001",
-      "KeySchema": [
-        {
-          "AttributeName": "id_sensor",
-          "KeyType": "HASH"
-        },
-        {
-          "AttributeName": "when_log",
-          "KeyType": "RANGE"
-        }
-      ],
-      "Projection": {
-        "ProjectionType": "ALL"
-      },
-      "ProvisionedThroughput": {
-        "ReadCapacityUnits": 1,
-        "WriteCapacityUnits": 1
-      }
-    }
-  ]
+  }
 }

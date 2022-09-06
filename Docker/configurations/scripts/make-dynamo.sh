@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 PATH_DYNAMODB_CONFIGURATION="configurations/dynamodb"
 
